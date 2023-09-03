@@ -1,0 +1,59 @@
+.drpOpen{
+display: block;
+transition: display 2.3s ease-in;
+}
+.drpClose{
+    display: none;
+    transition: display 2.3s ease-in;
+}
+a:hover{
+    cursor: pointer;
+}
+.navItems{
+    text-align: left;
+    color: #cb0808 !important;
+}
+.nav-item-parent{
+    /* font-family: 'Merriweather', serif; */
+    font-size: 20px;
+    font-weight: 500;
+    color: #003865 !important;
+    transition: 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+.nav-item-parent:hover{
+    background-color: #90adc6 !important;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+.arrow-icon{
+        /* font-family: 'Merriweather', serif; */
+        font-size: 18px;
+        font-weight: 500;
+        color: #003865 !important;
+}
+.nav-item-child{
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 200;
+    color: #003865 !important;
+    transition: 0.3s;
+}
+.nav-item-child:hover{
+    font-weight: 500;
+    background-color: #acbfce !important;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+.drw-logo{
+    max-width: 200px !important;
+}
+.div-logo{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 260px;
+}

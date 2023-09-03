@@ -1,0 +1,29 @@
+#header-body{
+    height: 70px;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-content: center;
+    position: fixed;
+
+}
+.user-drop{
+    list-style: none;
+    font-size: 36px;
+    font-weight: 500;
+    margin-right: 20px;
+    margin-top: 5px;
+    text-align: center;
+}
+.user-drop > .dropdown-toggle::after{
+    display: none;
+}
+.avatar{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+.dropdown-item > i{
+    font-size: 18px;
+}

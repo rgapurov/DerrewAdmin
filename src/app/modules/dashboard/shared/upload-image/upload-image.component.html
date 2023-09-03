@@ -1,0 +1,30 @@
+<div class="mt-3">
+  <label class="mb-2" for="image"><h2>Resim Yükle</h2></label>
+  <div id="image">
+    <div class="row">
+      <div class="col">
+          <input class="mb-2 form-control form-control-md" [(ngModel)]="imageValue" type="file" id="image" (change)="fileChangeEvent($event)"  />
+      </div>
+      <div class="col d-flex ">
+        <div *ngIf="croppedImage !=''" (click)="acceptImage()">
+          <i class="fa-solid fa-check text-success accept mx-2" ></i>
+        </div>
+        <div (click)="removeImage()">
+          <i class="fa-solid fa-trash-can text-danger delete mx-2" ></i>
+        </div>
+      </div>
+    </div>
+
+      <image-cropper 
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="ratio"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded($event)"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+      
+      ></image-cropper>
+  </div>
+</div>

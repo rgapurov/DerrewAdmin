@@ -1,0 +1,12 @@
+.delete{
+    font-size: 32px;
+}
+.image-cropper{
+    max-height: 70% !important;
+}
+.accept{
+    font-size: 38px;
+}
+i:hover{
+    cursor: pointer;
+}

@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600&display=swap');
+
+.btn-login{
+    background-color: #28DF99 !important;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 28px;
+    font-family: 'Barlow', sans-serif;
+    padding: 7px 30px;
+}
+.button-div{
+    margin: 30px 20px;
+    text-align: left;
+}
+body {
+    background-image: url("../../../../assets/img/backLogin.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-panel{
+    background-color: #fff;
+    box-shadow: 2px 2px 25px 5px #94949488 ;
+    width: min(840px, 90%);
+}
+.login-img{
+    width: 300px;
+    height: auto;
+}
+.login-left{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.login-right{
+    text-align: center;
+}
+.login-title{
+    font-size: 46px;
+    font-family: 'Barlow', sans-serif;
+    color: #003865;
+    margin-bottom: 40px;
+}
+.input{
+    padding: 0px 15px;
+    border: none;
+    font-size: 22px;
+    width: 250px;
+    color: #003865;
+}
+::placeholder{
+    color: #003865;
+}
+.input:focus::placeholder{
+    color: #F86F3C;
+}
+.input:focus{
+    color: #F86F3C;
+}
+.input-div {
+    margin: 10px 20px;
+    text-align: left;
+    margin-top: 10px !important;
+    font-size: 22px;
+    padding: 5px;
+
+}
+.color-blue{
+    color: #003865;
+    border-bottom: solid 2px #003865;
+}
+
+.color-orange{
+    color: #F86F3C;
+    border-bottom: solid 2px #F86F3C; 
+}

@@ -1,0 +1,37 @@
+<div class="side-der aside-wrapper scrollable-vertical scrollable-styled-light align-self-baseline h-100 w-100">
+  <div class="div-logo">
+    <img class="drw-logo" src="../../../assets/img/Derrew1Grey.png" alt="">
+  </div>
+      <nav class="nav-deep nav-deep-sm nav-deep-dark js-ajaxified">
+        <ul class="nav flex-column">
+          <li *ngFor="let item of allNavItems" class="nav-item">
+            <a *ngIf="item.hasChild; else noChild" class="nav-link nav-item-parent" >
+              <div (click)="ToggleMenu(item.name)">
+                <i style="margin-left: 2px;" class="{{item.icon}}"></i>
+                <span style="margin-left: 12px;">{{item.name}}</span>
+                <span class="group-icon  float-end" style="font-size: 16px;">
+                  <span class="arrow-icon">
+                    <i *ngIf="!item.isActive" class="fa-solid fa-chevron-right"></i>
+                    <i *ngIf="item.isActive" class="fa-solid fa-chevron-down"></i>
+                  </span>
+                </span>
+              </div>
+
+            </a>
+            <div *ngIf="item.isActive">
+              <ul *ngFor="let child of item.children" class="nav flex-column ">
+                <li class="nav-item"><a class="nav-link nav-item-child" routerLink="{{child.url}}" > <i class="{{child.icon}}"></i>  {{" " + child.name}}</a></li>
+              </ul>
+            </div>
+            <ng-template #noChild>
+              <a class="nav-link nav-item-parent" routerLink="{{item.url}}">
+                <i class="{{item.icon}}"></i>
+                <span>{{item.name}}</span>
+              </a>
+            </ng-template>
+          </li>
+        </ul>
+
+
+      </nav>
+      </div>

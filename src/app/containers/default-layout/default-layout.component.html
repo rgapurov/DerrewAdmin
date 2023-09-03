@@ -1,0 +1,24 @@
+<div id="spinner" class="spinner-display">
+  <div class="blur"></div>
+  <div class="spinnerbg">
+    <div class="back"><img class="spinnerGD" width="110px" src="../../../../../../../assets/img/logoGDsip.png" alt="">
+    </div>
+  </div>
+</div>
+  <header class="header-div" >
+    <app-header ></app-header>
+    <div id="toggle-div" class="open-side">
+      <span id="menu-button" (click)="toggleMenu()" >
+        <i id="toggle-icon" class="fa-solid fa-chevron-right toggle-icon open-toggle-icon open-toggle-icon"></i>
+      </span>
+    </div>
+  </header>
+  <div id="aside-div" class="aside-open">
+    <aside class="side-div d-flex">
+    <app-side-menu></app-side-menu>      
+    </aside>
+  </div>
+    <main id="main-div" class="main-div open-main" >
+        <router-outlet></router-outlet>
+    </main>
+
