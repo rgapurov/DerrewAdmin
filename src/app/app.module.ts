@@ -2,7 +2,6 @@ import { Component, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { FormModule, HeaderComponent } from '@coreui/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DefaultLayoutComponent } from './containers/default-layout/default-layout.component';
@@ -22,7 +21,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { AccordionModule } from 'primeng/accordion';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCaptchaModule } from 'ngx-captcha';
 import { CategoriesComponent } from './modules/dashboard/gelsin/categories/categories.component';
 import { ProductsComponent } from './modules/dashboard/gelsin/products/products.component';
@@ -31,7 +30,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { SideMenuComponent } from './containers/side-menu/side-menu.component';
-import { HeaderMenuComponent} from './containers/header/header.component';
+import { HeaderMenuComponent } from './containers/header/header.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { UploadImageComponent } from './modules/dashboard/shared/upload-image/upload-image.component';
 import { SpinnerInterceptor } from './core/interceps/spinner.interceptor';
@@ -40,16 +39,15 @@ import { SpinnerInterceptor } from './core/interceps/spinner.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
-    DefaultLayoutComponent, 
-    HomeComponent, CategoriesComponent, ProductsComponent, 
-    SideMenuComponent, HeaderMenuComponent,UploadImageComponent 
+    DefaultLayoutComponent,
+    HomeComponent, CategoriesComponent, ProductsComponent,
+    SideMenuComponent, HeaderMenuComponent, UploadImageComponent
   ],
   imports: [
-    BrowserModule, InputTextModule, 
-    BrowserAnimationsModule,InputSwitchModule, 
-    AppRoutingModule,ToggleButtonModule,FileUploadModule,
-    HttpClientModule,ImageCropperModule,
-    FormModule,
+    BrowserModule, InputTextModule,
+    BrowserAnimationsModule, InputSwitchModule,
+    AppRoutingModule, ToggleButtonModule, FileUploadModule,
+    HttpClientModule, ImageCropperModule,
     FormsModule,
     TableModule,
     ButtonModule,
@@ -73,13 +71,13 @@ import { SpinnerInterceptor } from './core/interceps/spinner.interceptor';
       preventDuplicates: true,
     }),
   ],
-  providers: [ 
+  providers: [
     {
-    provide: HTTP_INTERCEPTORS,
-    useClass: SpinnerInterceptor,
-    multi: true, // Birden fazla interceptor kullanılabilirse bu seçeneği true olarak ayarlayın
-  }
-],
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpinnerInterceptor,
+      multi: true, // Birden fazla interceptor kullanılabilirse bu seçeneği true olarak ayarlayın
+    }
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -14,9 +14,9 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  isTokenExpired:boolean;
+  isTokenExpired: boolean;
 
-  constructor(private router: Router, private toastrService: ToastrService,private authService:AuthService) {}
+  constructor(private router: Router, private toastrService: ToastrService, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     const isLoggedIn = localStorage.getItem('token');
@@ -27,12 +27,13 @@ export class AuthGuard implements CanActivate {
       const tokenTime = new Date(String(localStorage.getItem('expiration')));
       this.isTokenExpired = currentTime > tokenTime ? true : false
       if (this.isTokenExpired == true) {
-        localStorage.setItem('tokenExpired',Math.random().toString())
+        localStorage.setItem('tokenExpired', Math.random().toString())
       }
     }
 
     if (isLoggedIn == null || this.isTokenExpired == true) {
       this.authService.logOut();
+      this.toastrService.info('You need to login!');
     }
     return true;
   }
