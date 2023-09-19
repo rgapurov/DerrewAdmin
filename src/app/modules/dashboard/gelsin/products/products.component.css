@@ -1,6 +1,6 @@
-.add-product{
-    height: 60px;
-    width: 200px;
+.add-product {
+    height: 40px;
+    width: 140px;
     background-color: #fbfeff;
     display: flex;
     justify-content: center;
@@ -9,21 +9,59 @@
     border-radius: 5px;
     border: 0.2px solid #647C90;
     cursor: pointer;
-    margin:16px;
+    margin: 16px;
 }
-.add-product:hover{
+
+.add-product:hover {
     background-color: #eef3f5;
     border: 0.4px solid #546c80;
 }
+
 .add-product span {
-    font-size: 28px;
-}
-.add-product b {
-    margin-left: 5px;
     font-size: 24px;
 }
-.product-header{
+
+.add-product b {
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.product-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.product-isactive-true {
+    color: #fff;
+    background-color: #4cbb17;
+    height: 22px;
+    padding-top: 2px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #367e15;
+    text-align: center;
+    width: 50px;
+    user-select: none;
+    font-size: 12px;
+}
+
+.product-isactive-false {
+    color: #fff;
+    background-color: #db1f48;
+    height: 22px;
+    padding-top: 2px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #72162a;
+    text-align: center;
+    width: 50px;
+    user-select: none;
+    font-size: 12px;
+}
+
+.detail-icon {
+    font-size: 24px;
+}
+
+.detail-icon:hover {
+    cursor: pointer;
 }

@@ -4,7 +4,7 @@ export interface CategoryResponse{
     id:number,
     name: string,
     description: string,
-    image: string,
+    imageUrl: string,
     isActive: boolean,
     rank: number,
     subcategory: SubcategoryResponse[] 

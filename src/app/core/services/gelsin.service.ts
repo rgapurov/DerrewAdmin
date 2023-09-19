@@ -7,6 +7,7 @@ import { SingleResponseModel } from '../models/response/single-response.model';
 import { AddSubcategory, GetSubCategoryNameList, UpdateSubcategory } from '../models/request/subcategories-request.model';
 import { CategoryNameList } from '../models/response/subcategories-response.model';
 import { CategoryResponse } from '../models/response/category-response.model';
+import { Product } from '../models/response/product-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,11 @@ deleteCategory(id:number){
 }
 deleteSubategory(id:number){    
   return this.httpClient.post<SingleResponseModel<CategoryResponse[]>>(environment.apiUrl + '/SubCategory/DeleteSubCategory',{id:id});
+}
+  //#endregion
+  //#region Products
+  getAllProducts(){    
+    return this.httpClient.post<SingleResponseModel<Product[]>>(environment.apiUrl + '/Product/GetAllProducts',{});
 }
   //#endregion
 }

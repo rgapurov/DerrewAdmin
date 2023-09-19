@@ -1,264 +1,629 @@
 <div class="p-5">
-<div class="category-header">
-  <h3 class="m-3 mb-4">
-    Kategoriler
-  </h3>
-  <button (disabled)="categoryMode != 'list'" class="add-category" (click)="setCategoryMode('add');clearUpdatedCategory();cancelAddSubcategory()">
-    <span><i class="fa-regular fa-plus"></i></span>
-    <b>Yeni Kategori</b>
-  </button>
-</div>
+  <div class="category-header">
+    <h3 class="m-3 mb-4">Kategoriler</h3>
+    <button
+      (disabled)="(categoryMode != 'list')"
+      class="add-category"
+      (click)="
+        setCategoryMode('add'); clearUpdatedCategory(); cancelAddSubcategory()
+      "
+    >
+      <span><i class="fa-regular fa-plus"></i></span>
+      <b>Yeni Kategori</b>
+    </button>
+  </div>
 
-<p-table [value]="categoryList" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" rowExpandMode="single">
-  <ng-template pTemplate="header">
-    <tr *ngIf="categoryMode=='add'" class="cat-tr-add">
-      <th colspan="7">
-        <div class="row">
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="form-group">
-              <label class="mb-2" for="categoryName" ><b>Kategori Adı:</b></label>
-              <input type="text" class="form-control" [(ngModel)]="addCategory.name"  id="categoryName" placeholder="Kategori Adı">
-            </div>
-            <div class="form-group mx-3">
-              <label class="mb-2" for="categoryName"><b>Aktif:</b></label><br>
-              <div class="mt-2"><p-inputSwitch  [(ngModel)]="addCategory.isActive" ></p-inputSwitch></div>            
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="form-group ">
-              <label class="mb-2" for="categoryDesc"><b>Kategori Açıklaması:</b></label>
-              <textarea class="form-control" [(ngModel)]="addCategory.description" id="categoryDesc" rows="4"></textarea>
-            </div>
-          </div>
-          <div class="row col-12 col-md-6 col-lg-4">
-            <div class="form-group col-6">
-              <label class="mb-2" for="categoryDesc"><b>Kategori Resmi:</b></label>
-              <img *ngIf="imageData != ''" src={{imageData}} class="cat-add-img" alt="Kategori Resmi">
-            </div>
-            <div class="form-group col-6">
-              <button (click)="showDialogUploadImg()" type="button" class="btn btn-primary mt-5 btn-img"><i class="fa-regular fa-image"></i> Resim Yükle</button>
-              <button *ngIf="imageData != ''" (click)="clearAddCategoryImage()" type="button" class="btn btn-danger mt-1  mx-0 btn-img"><i class="fa-solid fa-trash-can "></i> Resimi Sil</button>
-            </div>
-          </div>
-        </div>
-      </th>
-      <th>
-        <div class="d-flex justify-content-end">
-          <p-button icon="pi pi-check"  styleClass="p-button-rounded  p-button-success" (click) = "AddCategory()"></p-button>
-          <p-button icon="pi pi-times" class="mx-3" styleClass="p-button-rounded p-button-danger" (click) = "cancelAddCategory(); "></p-button> 
-        </div>
-        </th>
-  </tr>  
-    <tr *ngIf="categoryList.length > 0; else noCategory" class="cat-tr">
-          <th style="width: 5rem"></th>
-          <th class="cat-img-th"></th>
-          <th class="cat-name-th" pSortableColumn="name">Kategori Adı <p-sortIcon field="name"></p-sortIcon></th>
-          <th class="cat-rank-th" pSortableColumn="rank">Sıra <p-sortIcon field="rank"></p-sortIcon></th>
-          <th class="cat-desc-th">Açıklama</th>
-          <th class="cat-subcat-count-th">Alt Kategori Sayısı</th>
-          <th class="cat-isactive-th" pSortableColumn="isActive">Durum <p-sortIcon field="isActive"></p-sortIcon></th>
-          <th class="cat-edit-th"></th>
-      </tr>
-
-      <ng-template #noCategory>
-        <tr *ngIf="categoryMode !='add'">
-          <td colspan="8">
-            <div class="no-subcat">
-              Kategori Bulunmaktadır. 
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-  </ng-template>
-  <ng-template pTemplate="body" let-category let-expanded="expanded">
-      
-    <tr *ngIf="categoryMode == 'edit' && category.id == updatedCategory.id; else notSelected" class="cat-update-tr" >
-      <td>
-        <button type="button" pButton pRipple [pRowToggler]="category" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-      </td>
-      <td class="update-cat-img-td">
-        <img *ngIf="imageData == '';else imageUploaded" src={{updatedCategory.image}} [alt]="category.name" style="width: 60px" class="shadow-4" />
-        <ng-template #imageUploaded>
-          <img src={{imageData}} [alt]="category.name" style="width: 80px" class="shadow-4" />
-        </ng-template>
-        <div class="image-btn"> 
-          <div  (click)="showDialogUploadImg()" style="cursor: pointer;"><i class="fa-solid fa-pen-to-square" ></i></div>
-          <div (click)="clearUpdateImg()" style="cursor: pointer;"><i class="fa-solid fa-trash-can"></i></div>
-        </div>
-      </td>
-      <td class="update-cat-name"><input type="text" class="form-control update-input" [(ngModel)]="updatedCategory.name"></td>
-      <td class="text-center">{{ category.rank }}</td>
-      <td><input type="text" class="form-control update-input" [(ngModel)]="updatedCategory.description"></td>
-      <td class="text-center">{{ category.subcategory.length }}</td>
-      <td class="text-center cat-isactive-td">
-        <div *ngIf="updatedCategory.isActive" (click)="changeIsActiveUpdateCategory()" class="cat-isactive-true"><b>Aktif</b></div>
-        <div *ngIf="!updatedCategory.isActive" (click)="changeIsActiveUpdateCategory()"  class="cat-isactive-false"><b>Pasif</b></div>
-      </td>
-      <td class="d-flex justify-content-end">
-          <p-button icon="pi pi-check"    styleClass="p-button-rounded  p-button-success" (click) = "confirmUpdate()"></p-button>
-          <p-button icon="pi pi-times" class="mx-3" styleClass="p-button-rounded p-button-danger" (click) = "clearUpdatedCategory(); setCategoryMode('list')"></p-button>
-      </td>         
-    </tr>
-    <ng-template #notSelected>
-      <tr class="cat-tr">
-        <td>
-            <button type="button" pButton pRipple [pRowToggler]="category" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-        </td>
-        <td><img src={{category.imageUrl}} [alt]="category.name" style="width: 60px" class="shadow-4" /></td>
-        <td class="cat-name">{{ category.name }}</td>
-        <td class="text-center">{{ category.rank }}</td>
-        <td>{{ category.description }}</td>
-        <td class="text-center">{{ category.subcategory.length }}</td>
-        <td class="text-center cat-isactive-td">
-          <div *ngIf="category.isActive" class="cat-isactive-true"><b>Aktif</b></div>
-          <div *ngIf="!category.isActive" class="cat-isactive-false"><b>Pasif</b></div>
-        </td>
-        <td class="d-flex">
-          <div  (click)="updateCategory(category);cancelAddSubcategory()" style="cursor: pointer;"><i class="fa-solid fa-pen-to-square mx-5 cat-edit" ></i></div>
-          <div (click)="deleteCategory(category.name,category.id)" style="cursor: pointer;"><i class="fa-solid fa-trash-can cat-delete"></i></div>  
-        </td>         
-    </tr>
-  </ng-template>
-  </ng-template>
-  <ng-template pTemplate="rowexpansion" let-category >
-    <tr class="bg-subcategory" >
-      <td colspan="8" >
-        <div class="cat-subcategory-head">
-        <div  class="d-flex justify-content-end">
-          <button (disabled)="subcategoryMode != 'list'" class="add-subcategory" (click)="setSubcategoryMode('add'); selectCategoryId(category.id);cancelAddCategory();clearUpdatedCategory();">
-            <span><i class="fa-regular fa-plus"></i></span>
-            <b>Yeni Alt Kategori</b>
-          </button>
-        </div>
-        <div *ngIf="subcategoryMode == 'add' && selectedCatId == category.id">
+  <p-table
+    [value]="categoryList"
+    dataKey="id"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    rowExpandMode="single"
+  >
+    <ng-template pTemplate="header">
+      <tr *ngIf="categoryMode == 'add'" class="cat-tr-add">
+        <th colspan="7">
           <div class="row">
-            <div class="col-12 col-md-6 col-lg-3">
+            <div class="col-12 col-md-6 col-lg-4">
               <div class="form-group">
-                <label class="mb-2" for="categoryName" ><b>Alt Kategori Adı:</b></label>
-                <input type="text" class="form-control" [(ngModel)]="addSubcategory.name"  id="categoryName" placeholder="Alt Kategori Adı">
+                <label class="mb-2" for="categoryName"
+                  ><b>Kategori Adı:</b></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="addCategory.name"
+                  id="categoryName"
+                  placeholder="Kategori Adı"
+                />
               </div>
               <div class="form-group mx-3">
-                <label class="mb-2" for="categoryName"><b>Aktif:</b></label><br>
-                <div class="mt-2"><p-inputSwitch  [(ngModel)]="addSubcategory.isActive" ></p-inputSwitch></div>            
+                <label class="mb-2" for="categoryName"><b>Aktif:</b></label
+                ><br />
+                <div class="mt-2">
+                  <p-inputSwitch
+                    [(ngModel)]="addCategory.isActive"
+                  ></p-inputSwitch>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-3">
-              <div class="form-group ">
-                <label class="mb-2" for="categoryDesc"><b>Alt Kategori Açıklaması:</b></label>
-                <textarea class="form-control" [(ngModel)]="addSubcategory.description" id="categoryDesc" rows="4"></textarea>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="form-group">
+                <label class="mb-2" for="categoryDesc"
+                  ><b>Kategori Açıklaması:</b></label
+                >
+                <textarea
+                  class="form-control"
+                  [(ngModel)]="addCategory.description"
+                  id="categoryDesc"
+                  rows="4"
+                ></textarea>
               </div>
             </div>
             <div class="row col-12 col-md-6 col-lg-4">
               <div class="form-group col-6">
-                <label class="mb-2" for="categoryDesc"><b>Alt Kategori Resmi:</b></label>
-                <img *ngIf="imageData != ''" src={{imageData}} class="cat-add-img" alt="Kategori Resmi">
+                <label class="mb-2" for="categoryDesc"
+                  ><b>Kategori Resmi:</b></label
+                >
+                <img
+                  *ngIf="imageData != ''"
+                  src="{{ imageData }}"
+                  class="cat-add-img"
+                  alt="Kategori Resmi"
+                />
               </div>
               <div class="form-group col-6">
-                <button (click)="showDialogUploadImg()" type="button" class="btn btn-primary mt-5 btn-img"><i class="fa-regular fa-image"></i> Resim Yükle</button>
-                <button *ngIf="imageData != ''" (click)="clearAddCategoryImage()" type="button" class="btn btn-danger mt-1 btn-img mx-0"><i class="fa-solid fa-trash-can "></i> Resimi Sil</button>
+                <button
+                  (click)="showDialogUploadImg()"
+                  type="button"
+                  class="btn btn-primary mt-5 btn-img"
+                >
+                  <i class="fa-regular fa-image"></i> Resim Yükle
+                </button>
+                <button
+                  *ngIf="imageData != ''"
+                  (click)="clearAddCategoryImage()"
+                  type="button"
+                  class="btn btn-danger mt-1 mx-0 btn-img"
+                >
+                  <i class="fa-solid fa-trash-can"></i> Resimi Sil
+                </button>
               </div>
             </div>
-            <div class="col-12 col-md-6 col-lg-2 d-flex justify-content-end mt-5">
-              <p-button icon="pi pi-check"  styleClass="p-button-rounded  p-button-success" (click) = "confirmAddSubcategory()"></p-button>
-              <p-button icon="pi pi-times" class="mx-3" styleClass="p-button-rounded p-button-danger" (click) = "cancelAddSubcategory()"></p-button> 
+          </div>
+        </th>
+        <th>
+          <div class="d-flex justify-content-end">
+            <p-button
+              icon="pi pi-check"
+              styleClass="p-button-rounded  p-button-success"
+              (click)="AddCategory()"
+            ></p-button>
+            <p-button
+              icon="pi pi-times"
+              class="mx-3"
+              styleClass="p-button-rounded p-button-danger"
+              (click)="cancelAddCategory()"
+            ></p-button>
+          </div>
+        </th>
+      </tr>
+      <tr *ngIf="categoryList.length > 0; else noCategory" class="cat-tr">
+        <th style="width: 5rem"></th>
+        <th class="cat-img-th"></th>
+        <th class="cat-name-th" pSortableColumn="name">
+          Kategori Adı <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th class="cat-rank-th" pSortableColumn="rank">
+          Sıra <p-sortIcon field="rank"></p-sortIcon>
+        </th>
+        <th class="cat-desc-th">Açıklama</th>
+        <th class="cat-subcat-count-th">Alt Kategori Sayısı</th>
+        <th class="cat-isactive-th" pSortableColumn="isActive">
+          Durum <p-sortIcon field="isActive"></p-sortIcon>
+        </th>
+        <th class="cat-edit-th"></th>
+      </tr>
+
+      <ng-template #noCategory>
+        <tr *ngIf="categoryMode != 'add'">
+          <td colspan="8">
+            <div class="no-subcat">Kategori Bulunmaktadır.</div>
+          </td>
+        </tr>
+      </ng-template>
+    </ng-template>
+    <ng-template pTemplate="body" let-category let-expanded="expanded">
+      <tr
+        *ngIf="
+          categoryMode == 'edit' && category.id == updatedCategory.id;
+          else notSelected
+        "
+        class="cat-update-tr"
+      >
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            [pRowToggler]="category"
+            class="p-button-text p-button-rounded p-button-plain"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          ></button>
+        </td>
+        <td class="update-cat-img-td">
+          <img
+            *ngIf="imageData == ''; else imageUploaded"
+            src="{{ updatedCategory.image }}"
+            [alt]="category.name"
+            style="width: 60px"
+            class="shadow-4"
+          />
+          <ng-template #imageUploaded>
+            <img
+              src="{{ imageData }}"
+              [alt]="category.name"
+              style="width: 80px"
+              class="shadow-4"
+            />
+          </ng-template>
+          <div class="image-btn">
+            <div (click)="showDialogUploadImg()" style="cursor: pointer">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div (click)="clearUpdateImg()" style="cursor: pointer">
+              <i class="fa-solid fa-trash-can"></i>
             </div>
           </div>
-        </div>
-      </div>
-      </td>
-    </tr>
-    <ng-container *ngIf="category.subcategory.length > 0; else noSubcategory">
-      <tr class="bg-subcategory p-0">
-
-        <td colspan="8" class="pt-0" >
-          <div class="p-0 cat-subcategory">
-            <p-table class="py-0 px-3 cat-subcategory-tb" [value]="category.subcategory" dataKey="id">
-              <ng-template pTemplate="header">
+        </td>
+        <td class="update-cat-name">
+          <input
+            type="text"
+            class="form-control update-input"
+            [(ngModel)]="updatedCategory.name"
+          />
+        </td>
+        <td class="text-center">{{ category.rank }}</td>
+        <td>
+          <input
+            type="text"
+            class="form-control update-input"
+            [(ngModel)]="updatedCategory.description"
+          />
+        </td>
+        <td class="text-center">{{ category.subcategory.length }}</td>
+        <td class="text-center cat-isactive-td">
+          <div
+            *ngIf="updatedCategory.isActive"
+            (click)="changeIsActiveUpdateCategory()"
+            class="cat-isactive-true"
+          >
+            <b>Aktif</b>
+          </div>
+          <div
+            *ngIf="!updatedCategory.isActive"
+            (click)="changeIsActiveUpdateCategory()"
+            class="cat-isactive-false"
+          >
+            <b>Pasif</b>
+          </div>
+        </td>
+        <td class="d-flex justify-content-end">
+          <p-button
+            icon="pi pi-check"
+            styleClass="p-button-rounded  p-button-success"
+            (click)="confirmUpdate()"
+          ></p-button>
+          <p-button
+            icon="pi pi-times"
+            class="mx-3"
+            styleClass="p-button-rounded p-button-danger"
+            (click)="clearUpdatedCategory(); setCategoryMode('list')"
+          ></p-button>
+        </td>
+      </tr>
+      <ng-template #notSelected>
+        <tr class="cat-tr">
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              [pRowToggler]="category"
+              class="p-button-text p-button-rounded p-button-plain"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            ></button>
+          </td>
+          <td>
+            <img
+              src="{{ category.imageUrl }}"
+              [alt]="category.name"
+              style="width: 60px"
+              class="shadow-4"
+            />
+          </td>
+          <td class="cat-name">{{ category.name }}</td>
+          <td class="text-center">{{ category.rank }}</td>
+          <td>{{ category.description }}</td>
+          <td class="text-center">{{ category.subcategory.length }}</td>
+          <td class="text-center cat-isactive-td">
+            <div *ngIf="category.isActive" class="cat-isactive-true">
+              <b>Aktif</b>
+            </div>
+            <div *ngIf="!category.isActive" class="cat-isactive-false">
+              <b>Pasif</b>
+            </div>
+          </td>
+          <td class="d-flex">
+            <div
+              (click)="updateCategory(category); cancelAddSubcategory()"
+              style="cursor: pointer"
+            >
+              <i class="fa-solid fa-pen-to-square mx-5 cat-edit"></i>
+            </div>
+            <div
+              (click)="deleteCategory(category.name, category.id)"
+              style="cursor: pointer"
+            >
+              <i class="fa-solid fa-trash-can cat-delete"></i>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-category>
+      <tr class="bg-subcategory">
+        <td colspan="8">
+          <div class="cat-subcategory-head">
+            <div class="d-flex justify-content-end">
+              <button
+                (disabled)="(subcategoryMode != 'list')"
+                class="add-subcategory"
+                (click)="
+                  setSubcategoryMode('add');
+                  selectCategoryId(category.id);
+                  cancelAddCategory();
+                  clearUpdatedCategory()
+                "
+              >
+                <span><i class="fa-regular fa-plus"></i></span>
+                <b>Yeni Alt Kategori</b>
+              </button>
+            </div>
+            <div
+              *ngIf="subcategoryMode == 'add' && selectedCatId == category.id"
+            >
+              <div class="row">
+                <div class="col-12 col-md-6 col-lg-3">
+                  <div class="form-group">
+                    <label class="mb-2" for="categoryName"
+                      ><b>Alt Kategori Adı:</b></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="addSubcategory.name"
+                      id="categoryName"
+                      placeholder="Alt Kategori Adı"
+                    />
+                  </div>
+                  <div class="form-group mx-3">
+                    <label class="mb-2" for="categoryName"><b>Aktif:</b></label
+                    ><br />
+                    <div class="mt-2">
+                      <p-inputSwitch
+                        [(ngModel)]="addSubcategory.isActive"
+                      ></p-inputSwitch>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                  <div class="form-group">
+                    <label class="mb-2" for="categoryDesc"
+                      ><b>Alt Kategori Açıklaması:</b></label
+                    >
+                    <textarea
+                      class="form-control"
+                      [(ngModel)]="addSubcategory.description"
+                      id="categoryDesc"
+                      rows="4"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="row col-12 col-md-6 col-lg-4">
+                  <div class="form-group col-6">
+                    <label class="mb-2" for="categoryDesc"
+                      ><b>Alt Kategori Resmi:</b></label
+                    >
+                    <img
+                      *ngIf="imageData != ''"
+                      src="{{ imageData }}"
+                      class="cat-add-img"
+                      alt="Kategori Resmi"
+                    />
+                  </div>
+                  <div class="form-group col-6">
+                    <button
+                      (click)="showDialogUploadImg()"
+                      type="button"
+                      class="btn btn-primary mt-5 btn-img"
+                    >
+                      <i class="fa-regular fa-image"></i> Resim Yükle
+                    </button>
+                    <button
+                      *ngIf="imageData != ''"
+                      (click)="clearAddCategoryImage()"
+                      type="button"
+                      class="btn btn-danger mt-1 btn-img mx-0"
+                    >
+                      <i class="fa-solid fa-trash-can"></i> Resimi Sil
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="col-12 col-md-6 col-lg-2 d-flex justify-content-end mt-5"
+                >
+                  <p-button
+                    icon="pi pi-check"
+                    styleClass="p-button-rounded  p-button-success"
+                    (click)="confirmAddSubcategory()"
+                  ></p-button>
+                  <p-button
+                    icon="pi pi-times"
+                    class="mx-3"
+                    styleClass="p-button-rounded p-button-danger"
+                    (click)="cancelAddSubcategory()"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <ng-container *ngIf="category.subcategory.length > 0; else noSubcategory">
+        <tr class="bg-subcategory p-0">
+          <td colspan="8" class="pt-0">
+            <div class="p-0 cat-subcategory">
+              <p-table
+                class="py-0 px-3 cat-subcategory-tb"
+                [value]="category.subcategory"
+                dataKey="id"
+              >
+                <ng-template pTemplate="header">
                   <tr class="subcat-th">
                     <th class="subcat-img-th"></th>
-                    <th class="subcat-name-th" pSortableColumn="name">Alt Kategori Adı <p-sortIcon field="name"></p-sortIcon></th>
-                    <th class="subcat-rank-th" pSortableColumn="rank">Sıra <p-sortIcon field="rank"></p-sortIcon></th>
+                    <th class="subcat-name-th" pSortableColumn="name">
+                      Alt Kategori Adı <p-sortIcon field="name"></p-sortIcon>
+                    </th>
+                    <th class="subcat-rank-th" pSortableColumn="rank">
+                      Sıra <p-sortIcon field="rank"></p-sortIcon>
+                    </th>
                     <th class="subcat-desc-th">Açıklama</th>
-                    <th class="cat-isactive-th" pSortableColumn="isActive">Aktif <p-sortIcon field="isActive"></p-sortIcon></th>
+                    <th class="cat-isactive-th" pSortableColumn="isActive">
+                      Aktif <p-sortIcon field="isActive"></p-sortIcon>
+                    </th>
                     <th class="cat-edit-th"></th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-subcategory>
-                  <tr *ngIf="subcategoryMode == 'edit' && subcategory.id == updatedSubcategory.id; else notSubSelected" class="subcat-update-tr" >
+                  <tr
+                    *ngIf="
+                      subcategoryMode == 'edit' &&
+                        subcategory.id == updatedSubcategory.id;
+                      else notSubSelected
+                    "
+                    class="subcat-update-tr"
+                  >
                     <td class="update-cat-img-td">
-                      <img *ngIf="imageData == ''; else imageUploaded" src={{updatedSubcategory.image}} [alt]="subcategory.name" style="width: 50px" class="shadow-4" />
+                      <img
+                        *ngIf="imageData == ''; else imageUploaded"
+                        src="{{ updatedSubcategory.image }}"
+                        [alt]="subcategory.name"
+                        style="width: 50px"
+                        class="shadow-4"
+                      />
                       <ng-template #imageUploaded>
-                        <img src={{imageData}} [alt]="subcategory.name" style="width: 80px" class="shadow-4" />
+                        <img
+                          src="{{ imageData }}"
+                          [alt]="subcategory.name"
+                          style="width: 80px"
+                          class="shadow-4"
+                        />
                       </ng-template>
-                      <div class="image-btn"> 
-                        <div  (click)="showDialogUploadImg()" style="cursor: pointer;"><i class="fa-solid fa-pen-to-square" ></i></div>
-                        <div (click)="clearUpdateImg()" style="cursor: pointer;"><i class="fa-solid fa-trash-can"></i></div>
+                      <div class="image-btn">
+                        <div
+                          (click)="showDialogUploadImg()"
+                          style="cursor: pointer"
+                        >
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div (click)="clearUpdateImg()" style="cursor: pointer">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </div>
                       </div>
                     </td>
-                    <td><input type="text" class="form-control" [(ngModel)]="updatedSubcategory.name"></td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="updatedSubcategory.name"
+                      />
+                    </td>
                     <td class="text-center">{{ subcategory.rank }}</td>
-                    <td><input type="text" class="form-control" [(ngModel)]="updatedSubcategory.description"></td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="updatedSubcategory.description"
+                      />
+                    </td>
                     <td class="text-center cat-isactive-td">
-                      <div *ngIf="updatedSubcategory.isActive" (click)="changeIsActiveUpdateSubcategory()" class="cat-isactive-true"><b>Aktif</b></div>
-                      <div *ngIf="!updatedSubcategory.isActive" (click)="changeIsActiveUpdateSubcategory()"  class="cat-isactive-false"><b>Pasif</b></div>
+                      <div
+                        *ngIf="updatedSubcategory.isActive"
+                        (click)="changeIsActiveUpdateSubcategory()"
+                        class="cat-isactive-true"
+                      >
+                        <b>Aktif</b>
+                      </div>
+                      <div
+                        *ngIf="!updatedSubcategory.isActive"
+                        (click)="changeIsActiveUpdateSubcategory()"
+                        class="cat-isactive-false"
+                      >
+                        <b>Pasif</b>
+                      </div>
                     </td>
                     <td class="d-flex justify-content-end">
-                        <p-button icon="pi pi-check"  class="mx-3"  styleClass="p-button-rounded  p-button-success" (click) = "confirmUpdateSubcategory()"></p-button>
-                        <p-button icon="pi pi-times" styleClass="p-button-rounded p-button-danger" (click) = "clearUpdatedSubcategory(); setSubcategoryMode('list')"></p-button>
-                    </td>         
+                      <p-button
+                        icon="pi pi-check"
+                        class="mx-3"
+                        styleClass="p-button-rounded  p-button-success"
+                        (click)="confirmUpdateSubcategory()"
+                      ></p-button>
+                      <p-button
+                        icon="pi pi-times"
+                        styleClass="p-button-rounded p-button-danger"
+                        (click)="
+                          clearUpdatedSubcategory(); setSubcategoryMode('list')
+                        "
+                      ></p-button>
+                    </td>
                   </tr>
                   <ng-template #notSubSelected>
                     <tr class="subcat-tr">
-                      <td><img src={{subcategory.imageUrl}} [alt]="subcategory.name" style="width: 50px" class="shadow-4" /></td>
+                      <td>
+                        <img
+                          src="{{ subcategory.imageUrl }}"
+                          [alt]="subcategory.name"
+                          style="width: 50px"
+                          class="shadow-4"
+                        />
+                      </td>
                       <td>{{ subcategory.name }}</td>
                       <td class="text-center">{{ subcategory.rank }}</td>
                       <td>{{ subcategory.description }}</td>
                       <td class="text-center subcat-isactive-td">
-                          <div *ngIf="subcategory.isActive" class="subcat-isactive-true"><b>Aktif</b></div>
-                          <div *ngIf="!subcategory.isActive" class="subcat-isactive-false"><b>Pasif</b></div>
-                        </td>
+                        <div
+                          *ngIf="subcategory.isActive"
+                          class="subcat-isactive-true"
+                        >
+                          <b>Aktif</b>
+                        </div>
+                        <div
+                          *ngIf="!subcategory.isActive"
+                          class="subcat-isactive-false"
+                        >
+                          <b>Pasif</b>
+                        </div>
+                      </td>
                       <td class="d-flex align-items-center">
-                        <div (click)="cancelAddSubcategory();cancelAddCategory();updateSubcategory(subcategory)" style="cursor: pointer;"><i class="fa-solid fa-pen-to-square mx-5 subcat-edit" ></i></div>
-                        <div (click)="deleteSubcategory(subcategory.name,subcategory.id)"  style="cursor: pointer;"><i class="fa-solid fa-trash-can subcat-delete"></i></div>  
-                      </td>         
+                        <div
+                          (click)="
+                            cancelAddSubcategory();
+                            cancelAddCategory();
+                            updateSubcategory(subcategory)
+                          "
+                          style="cursor: pointer"
+                        >
+                          <i
+                            class="fa-solid fa-pen-to-square mx-5 subcat-edit"
+                          ></i>
+                        </div>
+                        <div
+                          (click)="
+                            deleteSubcategory(subcategory.name, subcategory.id)
+                          "
+                          style="cursor: pointer"
+                        >
+                          <i class="fa-solid fa-trash-can subcat-delete"></i>
+                        </div>
+                      </td>
                     </tr>
-                  </ng-template>               
-              </ng-template>
-            </p-table>
-          </div>
-        </td>
-      </tr>
+                  </ng-template>
+                </ng-template>
+              </p-table>
+            </div>
+          </td>
+        </tr>
       </ng-container>
-    <ng-template #noSubcategory>
-      <tr *ngIf="category.subcategory.length==0" class="bg-subcategory">
-        <td colspan="8">
-          <div class="no-subcat">
-            Alt Kategori Bulunmaktadır. 
-          </div>
-        </td>
-      </tr>
+      <ng-template #noSubcategory>
+        <tr *ngIf="category.subcategory.length == 0" class="bg-subcategory">
+          <td colspan="8">
+            <div class="no-subcat">Alt Kategori Bulunmaktadır.</div>
+          </td>
+        </tr>
+      </ng-template>
     </ng-template>
-  </ng-template>
-</p-table> 
-
+  </p-table>
 </div>
-  <!-- Upload Image Modal-->
-  <p-dialog [modal]="true" [(visible)]="uploadImgModal" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '80vw', height: '80vh' }" [draggable]="false" [resizable]="false">
-    <app-upload-image [ratio]="catImgRatio" (image)="getImageString($event)"></app-upload-image>
+<!-- Upload Image Modal-->
+<p-dialog
+  [modal]="true"
+  [(visible)]="uploadImgModal"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '80vw', height: '80vh' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <app-upload-image
+    [ratio]="catImgRatio"
+    (image)="getImageString($event)"
+  ></app-upload-image>
 </p-dialog>
 
-<p-dialog header="Uyarı" [modal]="true" [(visible)]="confirmDelCat" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '500px', height: '300px' }" [draggable]="false" [resizable]="false">
-  <p class="p-delete-modal">{{catNameDeleted}} Kategorisini Silmek İstediginize Emin misiniz?</p>
+<p-dialog
+  header="Uyarı"
+  [modal]="true"
+  [(visible)]="confirmDelCat"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '500px', height: '300px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p class="p-delete-modal">
+    {{ catNameDeleted }} Kategorisini Silmek İstediginize Emin misiniz?
+  </p>
   <div class="d-flex justify-content-center mt-3">
-    <p-button icon="pi pi-check"  styleClass="p-button-rounded  p-button-success p-button-lg" [style]="{ width: '60px', height: '60px' }" (click) = "confirmDeleteCategory()"></p-button>
-    <p-button icon="pi pi-times" class="mx-3" styleClass="p-button-rounded p-button-danger" [style]="{ width: '60px', height: '60px' }" (click) = "cancelDeleteCategory()"></p-button> 
+    <p-button
+      icon="pi pi-check"
+      styleClass="p-button-rounded  p-button-success p-button-lg"
+      [style]="{ width: '60px', height: '60px' }"
+      (click)="confirmDeleteCategory()"
+    ></p-button>
+    <p-button
+      icon="pi pi-times"
+      class="mx-3"
+      styleClass="p-button-rounded p-button-danger"
+      [style]="{ width: '60px', height: '60px' }"
+      (click)="cancelDeleteCategory()"
+    ></p-button>
   </div>
 </p-dialog>
 
-<p-dialog header="Uyarı" [modal]="true" [(visible)]="confirmDelSubcat" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '500px', height: '300px' }" [draggable]="false" [resizable]="false">
-  <p class="p-delete-modal">{{catNameDeleted}} Alt Kategorisini Silmek İstediginize Emin misiniz?</p>
+<p-dialog
+  header="Uyarı"
+  [modal]="true"
+  [(visible)]="confirmDelSubcat"
+  [breakpoints]="{ '960px': '75vw' }"
+  [style]="{ width: '500px', height: '300px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <p class="p-delete-modal">
+    {{ catNameDeleted }} Alt Kategorisini Silmek İstediginize Emin misiniz?
+  </p>
   <div class="d-flex justify-content-center mt-3">
-    <p-button icon="pi pi-check"  styleClass="p-button-rounded  p-button-success p-button-lg" [style]="{ width: '60px', height: '60px' }" (click) = "confirmDeleteSubcategory()"></p-button>
-    <p-button icon="pi pi-times" class="mx-3" styleClass="p-button-rounded p-button-danger" [style]="{ width: '60px', height: '60px' }" (click) = "cancelDeleteSubcategory()"></p-button> 
+    <p-button
+      icon="pi pi-check"
+      styleClass="p-button-rounded  p-button-success p-button-lg"
+      [style]="{ width: '60px', height: '60px' }"
+      (click)="confirmDeleteSubcategory()"
+    ></p-button>
+    <p-button
+      icon="pi pi-times"
+      class="mx-3"
+      styleClass="p-button-rounded p-button-danger"
+      [style]="{ width: '60px', height: '60px' }"
+      (click)="cancelDeleteSubcategory()"
+    ></p-button>
   </div>
 </p-dialog>
